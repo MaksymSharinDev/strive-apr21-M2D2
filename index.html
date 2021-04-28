@@ -85,6 +85,10 @@ Could be the Amazon way, the Spotify or Apple music way or some other blog out t
             font-family: Hacked;
 
         }
+        section{
+            position: relative;
+            top: 10%
+        }
 
         /* ARTICLES */
         .normal,
@@ -776,7 +780,6 @@ Could be the Amazon way, the Spotify or Apple music way or some other blog out t
                 let template = document.getElementById('albumPicsTemplate');
                 let templateText = template.textContent;
                 let render = Templater(templateText);
-                console.log(render(albumPicsObj))
                 document.getElementById('albumPicsTemplate').outerHTML = render(albumPicsObj)
             }
             )()
