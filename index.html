@@ -33,6 +33,36 @@ Could be the Amazon way, the Spotify or Apple music way or some other blog out t
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
         integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <script>
+
+        const Templater = function (templateText) {
+            return new Function(
+                "page",
+                "var output=" +
+                JSON.stringify(templateText)
+                    .replace(/<%=(.+?)%>/g, '"+($1)+"')
+                    .replace(/<%(.+?)%>/g, '";$1\noutput+="') +
+                ";return output;"
+            );
+        }
+
+        let albumPicsObj = {
+            pics: (new Array(20)).fill('https://media.tenor.com/images/9e662d9e09e6ac74838ed6926f80afb3/tenor.gif')
+        }
+        
+    </script>
+    <!--
+        <script type="text/template" id="ourTemplate">
+        <h1> ... <%= obj.singleValue %> ... </h1>
+
+        <tag>
+        <% for (let i=0; i < obj.arr.length; i++) { %>
+        <repeatTag><%= obj.arr[i] %></repeatTag>
+        <% } %>
+        </tag>
+        </script>
+    -->
+
     <style>
         /* EXERCISE 1
             For all Albums we'd like to have a consistent style.
@@ -289,11 +319,38 @@ Could be the Amazon way, the Spotify or Apple music way or some other blog out t
             background: rgba(255, 255, 255, 0);
         }
 
-        /* FOOTER */
-        .mastfoot {
-            color: rgba(255, 255, 255, .5);
-            font-size: 16px;
+        /* Images squares */
+        .square {
+            position: relative;
+            width: 100%;
         }
+
+        .square:after {
+            content: "";
+            display: block;
+            padding-bottom: 100%;
+        }
+
+        .square-content {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .square-content>img {
+            max-width: 100%;
+            max-height: 100%;
+            align-self: center;
+        }
+
+        .center-vertiacal {
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* FOOTER */
     </style>
 </head>
 
@@ -655,27 +712,50 @@ Could be the Amazon way, the Spotify or Apple music way or some other blog out t
 
 
     </section>
+
     <!-- EXERCISE 7
             Just covers!
             Create a tapestry of album pictures. Every album picture must be "square" (use CSS to do that).
             Put at least 20 covers (also repeated) to have a nice effect and see how Bootstrap handles it.
-        -->
-    <section>
 
+            
+        -->
+    <section id="albumPics">
+        <div class="container">
+
+            <H2>album pictures </H2>
+            <script type="text/template" id="albumPicsTemplate">
+
+            <div class="row">
+                <% for (let i=0; i < albumPicsObj.pics.length; i++) { %>
+                <div class="col-lg-2 col-md-4 col-sm-6 p-1">
+                    <div class="square ">
+                        <div class="square-content text-center ">
+                            <img class="mx-auto d-block center-vertiacal" src="<%= albumPicsObj.pics[i] %>">
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+
+        </script>
+        </div>
     </section>
+
     <!-- EXERCISE 8
             Implement a footer with some information / social links
         -->
 
     <footer id="footer" class="d-flex justify-content-center mt-5">
         <div class="inner">
-            <p>My music tastes:  Metal , dubstep, italian rap, american pop russian covers</p>
-            <p>My Github: <a href="https://github.com/MaksymSharinDev">GITHUB</a> <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                    height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+            <p>My music tastes: Metal , dubstep, italian rap, american pop russian covers</p>
+            <p>My Github: <a href="https://github.com/MaksymSharinDev">GITHUB</a> <svg
+                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-github"
+                    viewBox="0 0 16 16">
                     <path
                         d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
                 </svg></p>
-           <!-- <p>albums present: <span id="albumCounter">8</span></p> -->
+            <!-- <p>albums present: <span id="albumCounter">8</span></p> -->
         </div>
     </footer>
     <!-- EXTRA:
@@ -691,6 +771,16 @@ Could be the Amazon way, the Spotify or Apple music way or some other blog out t
          EXERCISE 11
             Add in the footer a field that counts, on page load, how many ALBUMS there are on the page 
         -->
+    <script>
+            (function renderAlbumPics() {
+                let template = document.getElementById('albumPicsTemplate');
+                let templateText = template.textContent;
+                let render = Templater(templateText);
+                console.log(render(albumPicsObj))
+                document.getElementById('albumPicsTemplate').outerHTML = render(albumPicsObj)
+            }
+            )()
+    </script>
 </body>
 
 </html>
